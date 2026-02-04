@@ -1,35 +1,88 @@
 import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, SafeAreaView } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, SafeAreaView, StatusBar } from 'react-native';
 
 export default function ProfileScreen({ route, navigation }) {
   const { userEmail, userId } = route.params || {};
 
   return (
     <SafeAreaView style={styles.container}>
+      <StatusBar barStyle="light-content" />
       <View style={styles.content}>
-        {/* Logo/Title */}
-        <Text style={styles.logo}>👤</Text>
-        <Text style={styles.title}>Profile</Text>
+        {/* Profile Header */}
+        <View style={styles.header}>
+          <View style={styles.avatarContainer}>
+            <Text style={styles.avatar}>👤</Text>
+          </View>
+          <Text style={styles.title}>My Profile</Text>
+          <Text style={styles.subtitle}>Personal Information</Text>
+        </View>
 
         {/* User Info Card */}
         <View style={styles.infoCard}>
-          <Text style={styles.label}>Name:</Text>
-          <Text style={styles.value}>{userEmail || 'John Doe'}</Text>
+          <View style={styles.infoRow}>
+            <View style={styles.iconBox}>
+              <Text style={styles.icon}>👤</Text>
+            </View>
+            <View style={styles.infoContent}>
+              <Text style={styles.label}>Full Name</Text>
+              <Text style={styles.value}>{userEmail || 'John Doe'}</Text>
+            </View>
+          </View>
 
-          <Text style={styles.label}>ID:</Text>
-          <Text style={styles.value}>{userId || '12345'}</Text>
+          <View style={styles.divider} />
 
-          <Text style={styles.label}>Email:</Text>
-          <Text style={styles.value}>{userEmail || 'john@example.com'}</Text>
+          <View style={styles.infoRow}>
+            <View style={styles.iconBox}>
+              <Text style={styles.icon}>🆔</Text>
+            </View>
+            <View style={styles.infoContent}>
+              <Text style={styles.label}>User ID</Text>
+              <Text style={styles.value}>{userId || '12345'}</Text>
+            </View>
+          </View>
+
+          <View style={styles.divider} />
+
+          <View style={styles.infoRow}>
+            <View style={styles.iconBox}>
+              <Text style={styles.icon}>✉️</Text>
+            </View>
+            <View style={styles.infoContent}>
+              <Text style={styles.label}>Email</Text>
+              <Text style={styles.value}>{userEmail || 'john@example.com'}</Text>
+            </View>
+          </View>
+
+          <View style={styles.divider} />
+
+          <View style={styles.infoRow}>
+            <View style={styles.iconBox}>
+              <Text style={styles.icon}>📅</Text>
+            </View>
+            <View style={styles.infoContent}>
+              <Text style={styles.label}>Member Since</Text>
+              <Text style={styles.value}>January 2026</Text>
+            </View>
+          </View>
         </View>
 
-        {/* Back Button */}
-        <TouchableOpacity 
-          style={[styles.button, styles.backButton]}
-          onPress={() => navigation.goBack()}
-        >
-          <Text style={styles.buttonText}>Back to Home</Text>
-        </TouchableOpacity>
+        {/* Action Buttons */}
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity 
+            style={[styles.button, styles.editButton]}
+            activeOpacity={0.8}
+          >
+            <Text style={styles.buttonText}>Edit Profile</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity 
+            style={[styles.button, styles.backButton]}
+            onPress={() => navigation.goBack()}
+            activeOpacity={0.8}
+          >
+            <Text style={styles.buttonText}>Back to Home</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </SafeAreaView>
   );
@@ -38,57 +91,136 @@ export default function ProfileScreen({ route, navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f4f6f9',
+    backgroundColor: '#4a6fc0', // Consistent darker blue
   },
   content: {
     flex: 1,
-    padding: 20,
+    padding: 35,
     justifyContent: 'center',
   },
-  logo: {
+  header: {
+    alignItems: 'center',
+    marginBottom: 35,
+  },
+  avatarContainer: {
+    width: 120,
+    height: 120,
+    borderRadius: 60,
+    backgroundColor: 'rgba(255, 255, 255, 0.3)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 25,
+    elevation: 8,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.25,
+    shadowRadius: 8,
+    borderWidth: 3,
+    borderColor: 'rgba(255, 255, 255, 0.5)',
+  },
+  avatar: {
     fontSize: 60,
-    textAlign: 'center',
-    marginBottom: 20,
   },
   title: {
-    fontSize: 28,
-    fontWeight: 'bold',
+    fontSize: 36,
+    fontWeight: '800',
     textAlign: 'center',
-    marginBottom: 30,
-    color: '#1e88e5',
+    marginBottom: 12,
+    color: '#ffffff',
+    textShadowColor: 'rgba(0, 0, 0, 0.4)',
+    textShadowOffset: { width: 2, height: 2 },
+    textShadowRadius: 4,
+  },
+  subtitle: {
+    fontSize: 18,
+    textAlign: 'center',
+    color: '#ffffff',
+    fontWeight: '600',
+    textShadowColor: 'rgba(0, 0, 0, 0.3)',
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 2,
   },
   infoCard: {
-    backgroundColor: '#fff',
-    borderRadius: 12,
-    padding: 20,
-    marginBottom: 30,
+    backgroundColor: 'rgba(255, 255, 255, 0.95)',
+    borderRadius: 25,
+    padding: 30,
+    marginBottom: 35,
+    elevation: 10,
     shadowColor: '#000',
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.2,
+    shadowRadius: 15,
+    borderWidth: 1,
+    borderColor: 'rgba(0, 0, 0, 0.05)',
+  },
+  infoRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 20,
+  },
+  iconBox: {
+    width: 50,
+    height: 50,
+    borderRadius: 15,
+    backgroundColor: '#f0f2f5',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 20,
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
-    shadowRadius: 6,
-    elevation: 4,
+    shadowRadius: 3,
+  },
+  icon: {
+    fontSize: 24,
+  },
+  infoContent: {
+    flex: 1,
   },
   label: {
     fontSize: 16,
-    fontWeight: 'bold',
-    color: '#555',
-    marginTop: 10,
+    fontWeight: '700',
+    color: '#666',
+    marginBottom: 5,
   },
   value: {
-    fontSize: 16,
+    fontSize: 20,
+    fontWeight: '800',
     color: '#333',
-    paddingVertical: 5,
+  },
+  divider: {
+    height: 1,
+    backgroundColor: '#e0e0e0',
+    marginVertical: 8,
+  },
+  buttonContainer: {
+    width: '100%',
   },
   button: {
-    padding: 16,
-    borderRadius: 8,
+    padding: 22,
+    borderRadius: 15,
     alignItems: 'center',
+    marginBottom: 20,
+    elevation: 6,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.25,
+    shadowRadius: 8,
+    borderWidth: 2,
+  },
+  editButton: {
+    backgroundColor: '#ffffff',
+    borderColor: '#ffffff',
   },
   backButton: {
-    backgroundColor: '#757575',
+    backgroundColor: 'rgba(255, 255, 255, 0.3)',
+    borderWidth: 3,
+    borderColor: 'rgba(255, 255, 255, 0.6)',
   },
   buttonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: 'bold',
+    color: '#4a6fc0',
+    fontSize: 20,
+    fontWeight: '800',
   },
 });

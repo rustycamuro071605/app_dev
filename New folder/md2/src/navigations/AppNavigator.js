@@ -16,12 +16,16 @@ export default function AppNavigator() {
         initialRouteName="Welcome"
         screenOptions={{
           headerStyle: {
-            backgroundColor: '#1e88e5',
+            backgroundColor: '#667eea',
+            elevation: 0,
+            shadowOpacity: 0,
           },
           headerTintColor: '#fff',
           headerTitleStyle: {
-            fontWeight: 'bold',
+            fontWeight: '700',
+            fontSize: 20,
           },
+          headerBackTitleVisible: false,
         }}
       >
         <Stack.Screen 
@@ -32,22 +36,34 @@ export default function AppNavigator() {
         <Stack.Screen 
           name="Login" 
           component={LoginScreen} 
-          options={{ title: 'Login' }} 
+          options={{ 
+            title: 'Sign In',
+            headerShown: false
+          }} 
         />
         <Stack.Screen 
           name="SignUp" 
           component={SignUpScreen} 
-          options={{ title: 'Sign Up' }} 
+          options={{ 
+            title: 'Create Account',
+            headerShown: false
+          }} 
         />
         <Stack.Screen 
           name="Home" 
           component={HomeScreen} 
-          options={{ title: 'Home' }} 
+          options={{ 
+            title: 'Dashboard',
+            headerShown: false
+          }} 
         />
         <Stack.Screen 
           name="Profile" 
           component={ProfileScreen} 
-          options={{ title: 'Profile' }} 
+          options={{ 
+            title: 'My Profile',
+            headerShown: false
+          }} 
         />
       </Stack.Navigator>
     </NavigationContainer>

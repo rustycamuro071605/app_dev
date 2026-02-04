@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert, SafeAreaView } from 'react-native';
+import { StyleSheet, Text, View, TextInput, Alert, SafeAreaView } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import AnimatedLogo from '../components/AnimatedLogo';
+import ButtonAnimation from '../components/ButtonAnimation';
 
 export default function SignUpScreen({ navigation }) {
   const [name, setName] = useState('');
@@ -31,8 +34,9 @@ export default function SignUpScreen({ navigation }) {
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
         {/* Logo/Title */}
-        <Text style={styles.logo}>📝</Text>
+        <AnimatedLogo size={80} color="#8B4513" />
         <Text style={styles.title}>Sign Up</Text>
+        <Text style={styles.subtitle}>Create your account</Text>
 
         {/* Name Input */}
         <TextInput
@@ -69,9 +73,12 @@ export default function SignUpScreen({ navigation }) {
         />
 
         {/* Sign Up Button */}
-        <TouchableOpacity style={styles.signUpButton} onPress={handleSignUp}>
-          <Text style={styles.buttonText}>Sign Up</Text>
-        </TouchableOpacity>
+        <ButtonAnimation 
+          title="Sign Up"
+          backgroundColor="#8B4513"
+          onPress={handleSignUp}
+          style={styles.signUpButton}
+        />
 
         {/* Login Link */}
         <View style={styles.linkContainer}>
@@ -88,7 +95,7 @@ export default function SignUpScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f4f6f9',
+    backgroundColor: '#f5e9dc',
   },
   content: {
     flex: 1,
@@ -96,33 +103,50 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   logo: {
-    fontSize: 60,
+    fontSize: 70,
     textAlign: 'center',
-    marginBottom: 20,
+    marginBottom: 15,
+    color: '#8B4513',
   },
   title: {
-    fontSize: 28,
+    fontSize: 30,
     fontWeight: 'bold',
     textAlign: 'center',
+    marginBottom: 10,
+    color: '#8B4513',
+  },
+  subtitle: {
+    fontSize: 16,
+    textAlign: 'center',
     marginBottom: 30,
-    color: '#4caf50',
+    color: '#A1887F',
   },
   input: {
-    height: 50,
-    borderColor: '#ddd',
-    borderWidth: 1,
-    borderRadius: 8,
-    paddingHorizontal: 15,
-    marginBottom: 15,
+    height: 55,
+    borderColor: '#D7CCC8',
+    borderWidth: 2,
+    borderRadius: 12,
+    paddingHorizontal: 18,
+    marginBottom: 20,
     backgroundColor: '#fff',
     fontSize: 16,
+    shadowColor: '#8B4513',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 2,
   },
   signUpButton: {
-    backgroundColor: '#4caf50',
-    padding: 16,
-    borderRadius: 8,
+    backgroundColor: '#8B4513',
+    padding: 18,
+    borderRadius: 12,
     alignItems: 'center',
-    marginTop: 10,
+    marginTop: 15,
+    shadowColor: '#8B4513',
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.3,
+    shadowRadius: 5,
+    elevation: 4,
   },
   buttonText: {
     color: '#fff',
@@ -136,11 +160,11 @@ const styles = StyleSheet.create({
   },
   linkText: {
     fontSize: 16,
-    color: '#666',
+    color: '#5D4037',
   },
   link: {
     fontSize: 16,
-    color: '#1e88e5',
+    color: '#8B4513',
     fontWeight: 'bold',
   },
 });

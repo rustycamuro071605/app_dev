@@ -1,28 +1,39 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert, SafeAreaView } from 'react-native';
+import { StyleSheet, Text, View, TextInput, Alert, SafeAreaView } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import AnimatedLogo from '../components/AnimatedLogo';
+import ButtonAnimation from '../components/ButtonAnimation';
+import LoadingDots from '../components/LoadingDots';
 
 export default function LoginScreen({ navigation }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleLogin = () => {
+    setIsLoading(true);
+    // Simulate API call
+    setTimeout(() => {
+      setIsLoading(false);
     // Basic validation - check if fields are not empty
     if (!email.trim() || !password.trim()) {
       Alert.alert('Validation Error', 'Please fill in all fields');
       return;
     }
 
-    // In a real app, you would authenticate with backend here
-    // For this demo, we'll just navigate to home
-    navigation.navigate('Home', { userEmail: email });
+      // In a real app, you would authenticate with backend here
+      // For this demo, we'll just navigate to home
+      navigation.navigate('Home', { userEmail: email });
+    }, 1500);
   };
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
         {/* Logo/Title */}
-        <Text style={styles.logo}>🔐</Text>
+        <AnimatedLogo size={80} color="#8B4513" />
         <Text style={styles.title}>Login</Text>
+        <Text style={styles.subtitle}>Enter your credentials</Text>
 
         {/* Email/Username Input */}
         <TextInput
@@ -44,9 +55,19 @@ export default function LoginScreen({ navigation }) {
         />
 
         {/* Login Button */}
-        <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
-          <Text style={styles.buttonText}>Login</Text>
-        </TouchableOpacity>
+        {isLoading ? (
+          <View style={styles.loadingContainer}>
+            <LoadingDots size={10} color="#8B4513" />
+            <Text style={styles.loadingText}>Signing in...</Text>
+          </View>
+        ) : (
+          <ButtonAnimation 
+            title="Login"
+            backgroundColor="#8B4513"
+            onPress={handleLogin}
+            style={styles.loginButton}
+          />
+        )}
 
         {/* Sign Up Link */}
         <View style={styles.linkContainer}>
@@ -63,7 +84,7 @@ export default function LoginScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f4f6f9',
+    backgroundColor: '#f5e9dc',
   },
   content: {
     flex: 1,
@@ -71,33 +92,50 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   logo: {
-    fontSize: 60,
+    fontSize: 70,
     textAlign: 'center',
-    marginBottom: 20,
+    marginBottom: 15,
+    color: '#8B4513',
   },
   title: {
-    fontSize: 28,
+    fontSize: 30,
     fontWeight: 'bold',
     textAlign: 'center',
+    marginBottom: 10,
+    color: '#8B4513',
+  },
+  subtitle: {
+    fontSize: 16,
+    textAlign: 'center',
     marginBottom: 30,
-    color: '#1e88e5',
+    color: '#A1887F',
   },
   input: {
-    height: 50,
-    borderColor: '#ddd',
-    borderWidth: 1,
-    borderRadius: 8,
-    paddingHorizontal: 15,
-    marginBottom: 15,
+    height: 55,
+    borderColor: '#D7CCC8',
+    borderWidth: 2,
+    borderRadius: 12,
+    paddingHorizontal: 18,
+    marginBottom: 20,
     backgroundColor: '#fff',
     fontSize: 16,
+    shadowColor: '#8B4513',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 2,
   },
   loginButton: {
-    backgroundColor: '#1e88e5',
-    padding: 16,
-    borderRadius: 8,
+    backgroundColor: '#8B4513',
+    padding: 18,
+    borderRadius: 12,
     alignItems: 'center',
-    marginTop: 10,
+    marginTop: 15,
+    shadowColor: '#8B4513',
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.3,
+    shadowRadius: 5,
+    elevation: 4,
   },
   buttonText: {
     color: '#fff',
@@ -111,11 +149,21 @@ const styles = StyleSheet.create({
   },
   linkText: {
     fontSize: 16,
-    color: '#666',
+    color: '#5D4037',
   },
   link: {
     fontSize: 16,
-    color: '#1e88e5',
+    color: '#8B4513',
     fontWeight: 'bold',
+  },
+  loadingContainer: {
+    alignItems: 'center',
+    marginVertical: 20,
+  },
+  loadingText: {
+    color: '#8B4513',
+    fontSize: 16,
+    marginTop: 10,
+    fontStyle: 'italic',
   },
 });

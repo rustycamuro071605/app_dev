@@ -1,5 +1,7 @@
 import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, SafeAreaView } from 'react-native';
+import { StyleSheet, Text, View, SafeAreaView } from 'react-native';
+import AnimatedLogo from '../components/AnimatedLogo';
+import ButtonAnimation from '../components/ButtonAnimation';
 
 export default function HomeScreen({ route, navigation }) {
   const { userEmail, userId } = route.params || {};
@@ -13,27 +15,28 @@ export default function HomeScreen({ route, navigation }) {
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
         {/* Welcome Message */}
-        <Text style={styles.logo}>🏠</Text>
+        <AnimatedLogo size={80} color="#8B4513" />
         <Text style={styles.title}>Home</Text>
         <Text style={styles.welcomeMessage}>
           Welcome, {userEmail || 'User'}!
         </Text>
+        <Text style={styles.subtitle}>Enjoy your cozy space</Text>
 
         {/* View Profile Button */}
-        <TouchableOpacity 
-          style={[styles.button, styles.profileButton]}
+        <ButtonAnimation 
+          title="View Profile"
+          backgroundColor="#8B4513"
           onPress={() => navigation.navigate('Profile', { userEmail, userId })}
-        >
-          <Text style={styles.buttonText}>View Profile</Text>
-        </TouchableOpacity>
+          style={styles.button}
+        />
 
         {/* Logout Button */}
-        <TouchableOpacity 
-          style={[styles.button, styles.logoutButton]}
+        <ButtonAnimation 
+          title="Logout"
+          backgroundColor="#A1887F"
           onPress={handleLogout}
-        >
-          <Text style={styles.buttonText}>Logout</Text>
-        </TouchableOpacity>
+          style={styles.button}
+        />
       </View>
     </SafeAreaView>
   );
@@ -42,7 +45,7 @@ export default function HomeScreen({ route, navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f4f6f9',
+    backgroundColor: '#f5e9dc',
   },
   content: {
     flex: 1,
@@ -50,35 +53,48 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   logo: {
-    fontSize: 60,
+    fontSize: 70,
     textAlign: 'center',
-    marginBottom: 20,
+    marginBottom: 15,
+    color: '#8B4513',
   },
   title: {
-    fontSize: 28,
+    fontSize: 30,
     fontWeight: 'bold',
     textAlign: 'center',
-    marginBottom: 20,
-    color: '#1e88e5',
+    marginBottom: 15,
+    color: '#8B4513',
   },
   welcomeMessage: {
-    fontSize: 20,
+    fontSize: 22,
     textAlign: 'center',
-    marginBottom: 40,
-    color: '#333',
+    marginBottom: 15,
+    color: '#5D4037',
     lineHeight: 28,
   },
+  subtitle: {
+    fontSize: 16,
+    textAlign: 'center',
+    marginBottom: 40,
+    color: '#A1887F',
+    fontStyle: 'italic',
+  },
   button: {
-    padding: 16,
-    borderRadius: 8,
+    padding: 18,
+    borderRadius: 12,
     alignItems: 'center',
     marginBottom: 15,
+    shadowColor: '#8B4513',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 3,
   },
   profileButton: {
-    backgroundColor: '#1e88e5',
+    backgroundColor: '#8B4513',
   },
   logoutButton: {
-    backgroundColor: '#f44336',
+    backgroundColor: '#A1887F',
   },
   buttonText: {
     color: '#fff',

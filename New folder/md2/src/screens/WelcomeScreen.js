@@ -1,5 +1,7 @@
 import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Image, SafeAreaView } from 'react-native';
+import { StyleSheet, Text, View, SafeAreaView } from 'react-native';
+import AnimatedLogo from '../components/AnimatedLogo';
+import ButtonAnimation from '../components/ButtonAnimation';
 
 export default function WelcomeScreen({ navigation }) {
   return (
@@ -7,28 +9,29 @@ export default function WelcomeScreen({ navigation }) {
       <View style={styles.content}>
         {/* App Logo/Title */}
         <View style={styles.logoContainer}>
-          <Text style={styles.logo}>📱</Text>
+          <AnimatedLogo size={80} color="#8B4513" />
           <Text style={styles.appTitle}>MyApp</Text>
+          <Text style={styles.tagline}>Warm & Cozy Experience</Text>
         </View>
 
         {/* Welcome Message */}
         <Text style={styles.welcomeText}>Welcome to MyApp!</Text>
         
         {/* Login Button */}
-        <TouchableOpacity 
-          style={[styles.button, styles.loginButton]}
+        <ButtonAnimation 
+          title="Login"
+          backgroundColor="#8B4513"
           onPress={() => navigation.navigate('Login')}
-        >
-          <Text style={styles.buttonText}>Login</Text>
-        </TouchableOpacity>
+          style={styles.button}
+        />
 
         {/* Sign Up Button */}
-        <TouchableOpacity 
-          style={[styles.button, styles.signUpButton]}
+        <ButtonAnimation 
+          title="Sign Up"
+          backgroundColor="#A1887F"
           onPress={() => navigation.navigate('SignUp')}
-        >
-          <Text style={styles.buttonText}>Sign Up</Text>
-        </TouchableOpacity>
+          style={styles.button}
+        />
       </View>
     </SafeAreaView>
   );
@@ -37,7 +40,7 @@ export default function WelcomeScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f4f6f9',
+    backgroundColor: '#f5e9dc',
   },
   content: {
     flex: 1,
@@ -50,33 +53,46 @@ const styles = StyleSheet.create({
     marginBottom: 40,
   },
   logo: {
-    fontSize: 60,
+    fontSize: 70,
     marginBottom: 10,
+    color: '#8B4513',
   },
   appTitle: {
-    fontSize: 28,
+    fontSize: 32,
     fontWeight: 'bold',
-    color: '#1e88e5',
+    color: '#8B4513',
+    marginBottom: 8,
+  },
+  tagline: {
+    fontSize: 16,
+    color: '#A1887F',
+    fontStyle: 'italic',
+    textAlign: 'center',
   },
   welcomeText: {
     fontSize: 20,
     textAlign: 'center',
     marginBottom: 40,
-    color: '#333',
+    color: '#5D4037',
     lineHeight: 28,
   },
   button: {
     width: '100%',
-    padding: 16,
-    borderRadius: 8,
+    padding: 18,
+    borderRadius: 12,
     alignItems: 'center',
     marginBottom: 15,
+    shadowColor: '#8B4513',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 3,
   },
   loginButton: {
-    backgroundColor: '#1e88e5',
+    backgroundColor: '#8B4513',
   },
   signUpButton: {
-    backgroundColor: '#4caf50',
+    backgroundColor: '#A1887F',
   },
   buttonText: {
     color: '#fff',

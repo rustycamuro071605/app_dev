@@ -1,5 +1,7 @@
 import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, SafeAreaView } from 'react-native';
+import { StyleSheet, Text, View, SafeAreaView } from 'react-native';
+import AnimatedLogo from '../components/AnimatedLogo';
+import ButtonAnimation from '../components/ButtonAnimation';
 
 export default function ProfileScreen({ route, navigation }) {
   const { userEmail, userId } = route.params || {};
@@ -8,8 +10,9 @@ export default function ProfileScreen({ route, navigation }) {
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
         {/* Logo/Title */}
-        <Text style={styles.logo}>👤</Text>
+        <AnimatedLogo size={80} color="#8B4513" />
         <Text style={styles.title}>Profile</Text>
+        <Text style={styles.subtitle}>Your personal information</Text>
 
         {/* User Info Card */}
         <View style={styles.infoCard}>
@@ -24,12 +27,12 @@ export default function ProfileScreen({ route, navigation }) {
         </View>
 
         {/* Back Button */}
-        <TouchableOpacity 
-          style={[styles.button, styles.backButton]}
+        <ButtonAnimation 
+          title="Back to Home"
+          backgroundColor="#8B4513"
           onPress={() => navigation.goBack()}
-        >
-          <Text style={styles.buttonText}>Back to Home</Text>
-        </TouchableOpacity>
+          style={styles.button}
+        />
       </View>
     </SafeAreaView>
   );
@@ -38,7 +41,7 @@ export default function ProfileScreen({ route, navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f4f6f9',
+    backgroundColor: '#f5e9dc',
   },
   content: {
     flex: 1,
@@ -46,45 +49,59 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   logo: {
-    fontSize: 60,
+    fontSize: 70,
     textAlign: 'center',
-    marginBottom: 20,
+    marginBottom: 15,
+    color: '#8B4513',
   },
   title: {
-    fontSize: 28,
+    fontSize: 30,
     fontWeight: 'bold',
     textAlign: 'center',
+    marginBottom: 10,
+    color: '#8B4513',
+  },
+  subtitle: {
+    fontSize: 16,
+    textAlign: 'center',
     marginBottom: 30,
-    color: '#1e88e5',
+    color: '#A1887F',
   },
   infoCard: {
     backgroundColor: '#fff',
-    borderRadius: 12,
-    padding: 20,
+    borderRadius: 16,
+    padding: 25,
     marginBottom: 30,
-    shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowRadius: 6,
-    elevation: 4,
+    shadowColor: '#8B4513',
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    elevation: 6,
+    borderWidth: 1,
+    borderColor: '#D7CCC8',
   },
   label: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: '#555',
+    color: '#5D4037',
     marginTop: 10,
   },
   value: {
     fontSize: 16,
-    color: '#333',
+    color: '#3E2723',
     paddingVertical: 5,
   },
   button: {
-    padding: 16,
-    borderRadius: 8,
+    padding: 18,
+    borderRadius: 12,
     alignItems: 'center',
+    shadowColor: '#8B4513',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 3,
   },
   backButton: {
-    backgroundColor: '#757575',
+    backgroundColor: '#8B4513',
   },
   buttonText: {
     color: '#fff',

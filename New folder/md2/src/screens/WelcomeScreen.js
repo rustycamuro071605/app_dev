@@ -1,71 +1,133 @@
-import React from 'react';
-<<<<<<< HEAD
-import { StyleSheet, Text, View, SafeAreaView } from 'react-native';
-import AnimatedLogo from '../components/AnimatedLogo';
-import ButtonAnimation from '../components/ButtonAnimation';
-=======
-import { StyleSheet, Text, View, TouchableOpacity, SafeAreaView, StatusBar } from 'react-native';
->>>>>>> f86f157f907ed0329baa3f88316eda5926916f7b
+import React, { useEffect, useRef } from 'react';
+import { StyleSheet, Text, View, TouchableOpacity, SafeAreaView, StatusBar, Animated } from 'react-native';
+import * as Animatable from 'react-native-animatable';
+import { brownTheme } from '../themes/brownTheme';
 
 export default function WelcomeScreen({ navigation }) {
+  // Animation refs
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+  const scaleAnim = useRef(new Animated.Value(0.5)).current;
+  const slideAnim = useRef(new Animated.Value(-50)).current;
+
+  useEffect(() => {
+    // Entrance animations
+    Animated.parallel([
+      Animated.timing(fadeAnim, {
+        toValue: 1,
+        duration: 1000,
+        useNativeDriver: true,
+      }),
+      Animated.spring(scaleAnim, {
+        toValue: 1,
+        friction: 5,
+        useNativeDriver: true,
+      }),
+      Animated.timing(slideAnim, {
+        toValue: 0,
+        duration: 800,
+        useNativeDriver: true,
+      })
+    ]).start();
+  }, []);
+
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="light-content" />
-      <View style={styles.content}>
-        {/* App Logo/Title */}
-        <View style={styles.logoContainer}>
-<<<<<<< HEAD
-          <AnimatedLogo size={80} color="#8B4513" />
-          <Text style={styles.appTitle}>MyApp</Text>
-          <Text style={styles.tagline}>Warm & Cozy Experience</Text>
-=======
-          <View style={styles.iconCircle}>
-            <Text style={styles.logo}>📱</Text>
-          </View>
+      <StatusBar barStyle="light-content" backgroundColor={brownTheme.background} />
+      <Animated.View 
+        style={[
+          styles.content,
+          {
+            opacity: fadeAnim,
+            transform: [
+              { scale: scaleAnim },
+              { translateX: slideAnim }
+            ]
+          }
+        ]}
+      >
+        {/* App Logo/Title with animations */}
+        <Animatable.View 
+          animation="fadeInDown"
+          duration={1200}
+          style={styles.logoContainer}
+        >
+          <Animatable.View 
+            animation="bounceIn" 
+            duration={1500}
+            style={styles.iconCircle}
+          >
+            <Animatable.Text 
+              animation="rotate" 
+              iterationCount="infinite"
+              direction="alternate"
+              duration={4000}
+              style={styles.logo}
+            >
+              ☕
+            </Animatable.Text>
+          </Animatable.View>
           <Text style={styles.appTitle}>MyApp</Text>
           <Text style={styles.slogan}>Your Digital Experience</Text>
->>>>>>> f86f157f907ed0329baa3f88316eda5926916f7b
-        </View>
+        </Animatable.View>
 
-        {/* Welcome Message */}
-        <View style={styles.messageCard}>
+        {/* Welcome Message with fade animation */}
+        <Animatable.View 
+          animation="fadeInUp"
+          delay={500}
+          duration={800}
+          style={styles.messageCard}
+        >
           <Text style={styles.welcomeText}>Welcome to MyApp!</Text>
           <Text style={styles.subText}>Sign in to continue your journey</Text>
-        </View>
+        </Animatable.View>
         
-        {/* Login Button */}
-        <ButtonAnimation 
-          title="Login"
-          backgroundColor="#8B4513"
-          onPress={() => navigation.navigate('Login')}
-<<<<<<< HEAD
-          style={styles.button}
-        />
-=======
-          activeOpacity={0.8}
+        {/* Login Button with bounce animation */}
+        <Animatable.View 
+          animation="bounceIn" 
+          delay={800}
+          duration={600}
         >
-          <Text style={styles.buttonText}>Login</Text>
-        </TouchableOpacity>
->>>>>>> f86f157f907ed0329baa3f88316eda5926916f7b
+          <TouchableOpacity 
+            style={[styles.button, styles.loginButton]}
+            activeOpacity={0.8}
+            onPress={() => navigation.navigate('Login')}
+          >
+            <Animatable.Text 
+              animation="pulse"
+              iterationCount="infinite"
+              duration={2000}
+              style={styles.buttonText}
+            >
+              Login
+            </Animatable.Text>
+          </TouchableOpacity>
+        </Animatable.View>
 
-        {/* Sign Up Button */}
-        <ButtonAnimation 
-          title="Sign Up"
-          backgroundColor="#A1887F"
-          onPress={() => navigation.navigate('SignUp')}
-<<<<<<< HEAD
-          style={styles.button}
-        />
-=======
-          activeOpacity={0.8}
+        {/* Sign Up Button with slide animation */}
+        <Animatable.View 
+          animation="slideInUp"
+          delay={1000}
+          duration={700}
         >
-          <Text style={styles.signUpText}>Sign Up</Text>
-        </TouchableOpacity>
+          <TouchableOpacity 
+            style={[styles.button, styles.signUpButton]}
+            activeOpacity={0.8}
+            onPress={() => navigation.navigate('SignUp')}
+          >
+            <Text style={styles.signUpText}>Sign Up</Text>
+          </TouchableOpacity>
+        </Animatable.View>
 
-        {/* Footer */}
-        <Text style={styles.footerText}>© 2026 MyApp. All rights reserved.</Text>
->>>>>>> f86f157f907ed0329baa3f88316eda5926916f7b
-      </View>
+        {/* Footer with fade animation */}
+        <Animatable.Text 
+          animation="fadeIn"
+          delay={1200}
+          duration={600}
+          style={styles.footerText}
+        >
+          © 2026 MyApp. All rights reserved.
+        </Animatable.Text>
+      </Animated.View>
     </SafeAreaView>
   );
 }
@@ -73,11 +135,7 @@ export default function WelcomeScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-<<<<<<< HEAD
-    backgroundColor: '#f5e9dc',
-=======
-    backgroundColor: '#4a6fc0', // Darker, more visible blue
->>>>>>> f86f157f907ed0329baa3f88316eda5926916f7b
+    backgroundColor: brownTheme.background,
   },
   content: {
     flex: 1,
@@ -94,142 +152,113 @@ const styles = StyleSheet.create({
     width: 120,
     height: 120,
     borderRadius: 60,
-    backgroundColor: 'rgba(255, 255, 255, 0.3)',
+    backgroundColor: brownTheme.backgroundOverlay,
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 25,
     borderWidth: 3,
-    borderColor: 'rgba(255, 255, 255, 0.5)',
+    borderColor: brownTheme.secondary,
+    elevation: 8,
+    shadowColor: brownTheme.shadowColor,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
   },
   logo: {
-<<<<<<< HEAD
-    fontSize: 70,
-    marginBottom: 10,
-    color: '#8B4513',
-  },
-  appTitle: {
-    fontSize: 32,
-    fontWeight: 'bold',
-    color: '#8B4513',
-    marginBottom: 8,
-  },
-  tagline: {
-    fontSize: 16,
-    color: '#A1887F',
-    fontStyle: 'italic',
-    textAlign: 'center',
-=======
     fontSize: 60,
     textAlign: 'center',
+    color: brownTheme.secondary,
   },
   appTitle: {
     fontSize: 42,
     fontWeight: '800',
-    color: '#ffffff',
+    color: brownTheme.textPrimary,
     marginBottom: 12,
-    textShadowColor: 'rgba(0, 0, 0, 0.4)',
+    textShadowColor: brownTheme.shadowColor,
     textShadowOffset: { width: 2, height: 2 },
     textShadowRadius: 4,
   },
   slogan: {
     fontSize: 20,
-    color: '#ffffff',
+    color: brownTheme.textSecondary,
     fontWeight: '600',
-    textShadowColor: 'rgba(0, 0, 0, 0.3)',
+    textShadowColor: brownTheme.shadowColor,
     textShadowOffset: { width: 1, height: 1 },
     textShadowRadius: 2,
   },
   messageCard: {
-    backgroundColor: 'rgba(255, 255, 255, 0.25)',
+    backgroundColor: brownTheme.backgroundOverlay,
     borderRadius: 25,
     padding: 30,
     marginBottom: 45,
     width: '100%',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.3)',
->>>>>>> f86f157f907ed0329baa3f88316eda5926916f7b
+    borderColor: brownTheme.secondary,
+    elevation: 6,
+    shadowColor: brownTheme.shadowColor,
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.3,
+    shadowRadius: 6,
   },
   welcomeText: {
     fontSize: 28,
     fontWeight: '800',
     textAlign: 'center',
-<<<<<<< HEAD
-    marginBottom: 40,
-    color: '#5D4037',
-    lineHeight: 28,
-  },
-  button: {
-    width: '100%',
-    padding: 18,
-    borderRadius: 12,
-    alignItems: 'center',
+    color: brownTheme.textPrimary,
     marginBottom: 15,
-    shadowColor: '#8B4513',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  loginButton: {
-    backgroundColor: '#8B4513',
-  },
-  signUpButton: {
-    backgroundColor: '#A1887F',
-=======
-    color: '#ffffff',
-    marginBottom: 15,
-    textShadowColor: 'rgba(0, 0, 0, 0.3)',
+    textShadowColor: brownTheme.shadowColor,
     textShadowOffset: { width: 1, height: 1 },
     textShadowRadius: 2,
   },
   subText: {
     fontSize: 18,
     textAlign: 'center',
-    color: '#ffffff',
+    color: brownTheme.textSecondary,
     fontWeight: '500',
     lineHeight: 26,
   },
   button: {
-    width: '100%',
-    padding: 22,
+    paddingVertical: 25,
+    paddingHorizontal: 40,
     borderRadius: 15,
     alignItems: 'center',
     marginBottom: 25,
     elevation: 8,
-    shadowColor: '#000',
+    shadowColor: brownTheme.shadowColor,
     shadowOffset: { width: 0, height: 6 },
     shadowOpacity: 0.3,
     shadowRadius: 10,
     borderWidth: 2,
+    alignSelf: 'center',
+    minWidth: '85%',
   },
   loginButton: {
-    backgroundColor: '#ffffff',
-    borderColor: '#ffffff',
+    backgroundColor: brownTheme.secondary,
+    borderColor: brownTheme.secondary,
   },
   signUpButton: {
     backgroundColor: 'transparent',
     borderWidth: 3,
-    borderColor: '#ffffff',
->>>>>>> f86f157f907ed0329baa3f88316eda5926916f7b
+    borderColor: brownTheme.secondary,
   },
   buttonText: {
-    color: '#4a6fc0',
+    color: brownTheme.primaryDark,
     fontSize: 20,
     fontWeight: '800',
   },
   signUpText: {
-    color: '#ffffff',
+    color: brownTheme.textPrimary,
     fontSize: 20,
     fontWeight: '800',
   },
   footerText: {
     position: 'absolute',
     bottom: 35,
-    color: 'rgba(255, 255, 255, 0.85)',
+    color: brownTheme.textSecondary,
     fontSize: 14,
     fontWeight: '600',
-    textShadowColor: 'rgba(0, 0, 0, 0.3)',
+    textShadowColor: brownTheme.shadowColor,
     textShadowOffset: { width: 1, height: 1 },
     textShadowRadius: 1,
   },

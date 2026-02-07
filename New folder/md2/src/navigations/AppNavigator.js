@@ -6,6 +6,7 @@ import LoginScreen from '../screens/LoginScreen';
 import SignUpScreen from '../screens/SignUpScreen';
 import HomeScreen from '../screens/HomeScreen';
 import ProfileScreen from '../screens/ProfileScreen';
+import { brownTheme } from '../themes/brownTheme';
 
 const Stack = createStackNavigator();
 
@@ -16,18 +17,15 @@ export default function AppNavigator() {
         initialRouteName="Welcome"
         screenOptions={{
           headerStyle: {
-<<<<<<< HEAD
-            backgroundColor: '#8B4513',
-=======
-            backgroundColor: '#667eea',
+            backgroundColor: brownTheme.background,
             elevation: 0,
             shadowOpacity: 0,
->>>>>>> f86f157f907ed0329baa3f88316eda5926916f7b
           },
-          headerTintColor: '#fff',
+          headerTintColor: brownTheme.textPrimary,
           headerTitleStyle: {
             fontWeight: '700',
             fontSize: 20,
+            color: brownTheme.textPrimary,
           },
           headerBackTitleVisible: false,
         }}
@@ -35,14 +33,20 @@ export default function AppNavigator() {
         <Stack.Screen 
           name="Welcome" 
           component={WelcomeScreen} 
-          options={{ headerShown: false }} 
+          options={{ 
+            headerShown: false,
+            animationEnabled: true,
+            gestureEnabled: true
+          }} 
         />
         <Stack.Screen 
           name="Login" 
           component={LoginScreen} 
           options={{ 
             title: 'Sign In',
-            headerShown: false
+            headerShown: false,
+            animationEnabled: true,
+            gestureEnabled: true
           }} 
         />
         <Stack.Screen 
@@ -50,7 +54,9 @@ export default function AppNavigator() {
           component={SignUpScreen} 
           options={{ 
             title: 'Create Account',
-            headerShown: false
+            headerShown: false,
+            animationEnabled: true,
+            gestureEnabled: true
           }} 
         />
         <Stack.Screen 
@@ -58,7 +64,9 @@ export default function AppNavigator() {
           component={HomeScreen} 
           options={{ 
             title: 'Dashboard',
-            headerShown: false
+            headerShown: false,
+            animationEnabled: true,
+            gestureEnabled: true
           }} 
         />
         <Stack.Screen 
@@ -66,7 +74,9 @@ export default function AppNavigator() {
           component={ProfileScreen} 
           options={{ 
             title: 'My Profile',
-            headerShown: false
+            headerShown: false,
+            animationEnabled: true,
+            gestureEnabled: true
           }} 
         />
       </Stack.Navigator>

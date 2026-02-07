@@ -1,112 +1,127 @@
-import React from 'react';
-<<<<<<< HEAD
-import { StyleSheet, Text, View, SafeAreaView } from 'react-native';
-import AnimatedLogo from '../components/AnimatedLogo';
-import ButtonAnimation from '../components/ButtonAnimation';
-=======
-import { StyleSheet, Text, View, TouchableOpacity, SafeAreaView, StatusBar } from 'react-native';
->>>>>>> f86f157f907ed0329baa3f88316eda5926916f7b
+import React, { useEffect, useRef } from 'react';
+import { StyleSheet, Text, View, TouchableOpacity, SafeAreaView, StatusBar, Animated } from 'react-native';
+import * as Animatable from 'react-native-animatable';
+import { brownTheme } from '../themes/brownTheme';
 
 export default function ProfileScreen({ route, navigation }) {
   const { userEmail, userId } = route.params || {};
+  
+  // Animation refs
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+  const slideAnim = useRef(new Animated.Value(50)).current;
+
+  useEffect(() => {
+    // Entrance animations
+    Animated.parallel([
+      Animated.timing(fadeAnim, {
+        toValue: 1,
+        duration: 800,
+        useNativeDriver: true,
+      }),
+      Animated.timing(slideAnim, {
+        toValue: 0,
+        duration: 600,
+        useNativeDriver: true,
+      })
+    ]).start();
+  }, []);
+
+  const handleBack = () => {
+    navigation.goBack();
+  };
+
+  const handleEditProfile = () => {
+    // Handle profile editing
+  };
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="light-content" />
-      <View style={styles.content}>
-<<<<<<< HEAD
-        {/* Logo/Title */}
-        <AnimatedLogo size={80} color="#8B4513" />
-        <Text style={styles.title}>Profile</Text>
-        <Text style={styles.subtitle}>Your personal information</Text>
-=======
-        {/* Profile Header */}
-        <View style={styles.header}>
-          <View style={styles.avatarContainer}>
-            <Text style={styles.avatar}>👤</Text>
-          </View>
+      <StatusBar barStyle="light-content" backgroundColor={brownTheme.background} />
+      <Animated.View 
+        style={[
+          styles.content,
+          {
+            opacity: fadeAnim,
+            transform: [{ translateY: slideAnim }]
+          }
+        ]}
+      >
+        {/* Header with Back Button and animations */}
+        <Animatable.View 
+          animation="fadeInDown"
+          duration={800}
+          style={styles.header}
+        >
+          <TouchableOpacity style={styles.backButton} onPress={handleBack}>
+            <Text style={styles.backIcon}>←</Text>
+          </TouchableOpacity>
           <Text style={styles.title}>My Profile</Text>
-          <Text style={styles.subtitle}>Personal Information</Text>
-        </View>
->>>>>>> f86f157f907ed0329baa3f88316eda5926916f7b
+        </Animatable.View>
 
-        {/* User Info Card */}
-        <View style={styles.infoCard}>
-          <View style={styles.infoRow}>
-            <View style={styles.iconBox}>
-              <Text style={styles.icon}>👤</Text>
-            </View>
-            <View style={styles.infoContent}>
-              <Text style={styles.label}>Full Name</Text>
-              <Text style={styles.value}>{userEmail || 'John Doe'}</Text>
-            </View>
+        {/* Profile Card with bounce animation */}
+        <Animatable.View 
+          animation="bounceIn"
+          delay={200}
+          duration={800}
+          style={styles.profileCard}
+        >
+          <View style={styles.avatarContainer}>
+            <Text style={styles.avatar}>{userEmail ? userEmail.charAt(0).toUpperCase() : '👤'}</Text>
           </View>
+          <Text style={styles.profileName}>
+            {userEmail || 'User Name'}
+          </Text>
+          <Text style={styles.profileId}>
+            @{userId || 'username'}
+          </Text>
+        </Animatable.View>
 
-          <View style={styles.divider} />
-
-          <View style={styles.infoRow}>
-            <View style={styles.iconBox}>
-              <Text style={styles.icon}>🆔</Text>
-            </View>
-            <View style={styles.infoContent}>
-              <Text style={styles.label}>User ID</Text>
-              <Text style={styles.value}>{userId || '12345'}</Text>
-            </View>
+        {/* Profile Info with staggered animations */}
+        <Animatable.View 
+          animation="fadeInUp"
+          delay={400}
+          duration={800}
+          style={styles.infoContainer}
+        >
+          <View style={styles.infoItem}>
+            <Text style={styles.infoLabel}>Email</Text>
+            <Text style={styles.infoValue}>
+              {userEmail ? `${userEmail}@myapp.com` : 'user@example.com'}
+            </Text>
           </View>
-
-          <View style={styles.divider} />
-
-          <View style={styles.infoRow}>
-            <View style={styles.iconBox}>
-              <Text style={styles.icon}>✉️</Text>
-            </View>
-            <View style={styles.infoContent}>
-              <Text style={styles.label}>Email</Text>
-              <Text style={styles.value}>{userEmail || 'john@example.com'}</Text>
-            </View>
+          
+          <View style={styles.infoItem}>
+            <Text style={styles.infoLabel}>Member Since</Text>
+            <Text style={styles.infoValue}>January 2026</Text>
           </View>
-
-          <View style={styles.divider} />
-
-          <View style={styles.infoRow}>
-            <View style={styles.iconBox}>
-              <Text style={styles.icon}>📅</Text>
-            </View>
-            <View style={styles.infoContent}>
-              <Text style={styles.label}>Member Since</Text>
-              <Text style={styles.value}>January 2026</Text>
-            </View>
+          
+          <View style={styles.infoItem}>
+            <Text style={styles.infoLabel}>Projects</Text>
+            <Text style={styles.infoValue}>12 Active Projects</Text>
           </View>
-        </View>
+          
+          <View style={styles.infoItem}>
+            <Text style={styles.infoLabel}>Status</Text>
+            <Text style={styles.infoValueActive}>Premium Member</Text>
+          </View>
+        </Animatable.View>
 
-<<<<<<< HEAD
-        {/* Back Button */}
-        <ButtonAnimation 
-          title="Back to Home"
-          backgroundColor="#8B4513"
-          onPress={() => navigation.goBack()}
-          style={styles.button}
-        />
-=======
-        {/* Action Buttons */}
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity 
-            style={[styles.button, styles.editButton]}
-            activeOpacity={0.8}
-          >
-            <Text style={styles.buttonText}>Edit Profile</Text>
+        {/* Action Buttons with slide animations */}
+        <Animatable.View 
+          animation="slideInUp"
+          delay={600}
+          duration={700}
+          style={styles.actionsContainer}
+        >
+          <TouchableOpacity style={styles.editButton} onPress={handleEditProfile}>
+            <Text style={styles.editButtonText}>Edit Profile</Text>
           </TouchableOpacity>
-
-          <TouchableOpacity 
-            style={[styles.button, styles.backButton]}
-            onPress={() => navigation.goBack()}
-            activeOpacity={0.8}
-          >
-            <Text style={styles.buttonText}>Back to Home</Text>
+          
+          <TouchableOpacity style={styles.settingsButton}>
+            <Text style={styles.settingsButtonText}>Account Settings</Text>
           </TouchableOpacity>
-        </View>
->>>>>>> f86f157f907ed0329baa3f88316eda5926916f7b
-      </View>
+        </Animatable.View>
+      </Animated.View>
     </SafeAreaView>
   );
 }
@@ -114,197 +129,158 @@ export default function ProfileScreen({ route, navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-<<<<<<< HEAD
-    backgroundColor: '#f5e9dc',
-=======
-    backgroundColor: '#4a6fc0', // Consistent darker blue
->>>>>>> f86f157f907ed0329baa3f88316eda5926916f7b
+    backgroundColor: brownTheme.background,
   },
   content: {
     flex: 1,
     padding: 35,
-    justifyContent: 'center',
   },
-<<<<<<< HEAD
-  logo: {
-    fontSize: 70,
-    textAlign: 'center',
-    marginBottom: 15,
-    color: '#8B4513',
-  },
-  title: {
-    fontSize: 30,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    marginBottom: 10,
-    color: '#8B4513',
-  },
-  subtitle: {
-    fontSize: 16,
-    textAlign: 'center',
-    marginBottom: 30,
-    color: '#A1887F',
-  },
-  infoCard: {
-    backgroundColor: '#fff',
-    borderRadius: 16,
-    padding: 25,
-    marginBottom: 30,
-    shadowColor: '#8B4513',
-    shadowOpacity: 0.2,
-    shadowRadius: 8,
-    elevation: 6,
-    borderWidth: 1,
-    borderColor: '#D7CCC8',
-  },
-  label: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#5D4037',
-    marginTop: 10,
-  },
-  value: {
-    fontSize: 16,
-    color: '#3E2723',
-    paddingVertical: 5,
-  },
-  button: {
-    padding: 18,
-    borderRadius: 12,
+  header: {
+    flexDirection: 'row',
     alignItems: 'center',
-    shadowColor: '#8B4513',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-    elevation: 3,
+    marginBottom: 40,
   },
   backButton: {
-    backgroundColor: '#8B4513',
-=======
-  header: {
+    padding: 10,
+    marginRight: 15,
+  },
+  backIcon: {
+    fontSize: 28,
+    color: brownTheme.textPrimary,
+    fontWeight: 'bold',
+  },
+  title: {
+    fontSize: 32,
+    fontWeight: '800',
+    color: brownTheme.textPrimary,
+    textShadowColor: brownTheme.shadowColor,
+    textShadowOffset: { width: 2, height: 2 },
+    textShadowRadius: 4,
+  },
+  profileCard: {
+    backgroundColor: brownTheme.secondaryLight,
+    borderRadius: 25,
+    padding: 35,
     alignItems: 'center',
-    marginBottom: 35,
+    marginBottom: 40,
+    elevation: 12,
+    shadowColor: brownTheme.shadowColor,
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.3,
+    shadowRadius: 20,
+    borderWidth: 2,
+    borderColor: brownTheme.secondary,
   },
   avatarContainer: {
     width: 120,
     height: 120,
     borderRadius: 60,
-    backgroundColor: 'rgba(255, 255, 255, 0.3)',
+    backgroundColor: brownTheme.primary,
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 25,
+    borderWidth: 4,
+    borderColor: brownTheme.secondary,
     elevation: 8,
-    shadowColor: '#000',
+    shadowColor: brownTheme.shadowColor,
     shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.25,
+    shadowOpacity: 0.3,
     shadowRadius: 8,
-    borderWidth: 3,
-    borderColor: 'rgba(255, 255, 255, 0.5)',
   },
   avatar: {
     fontSize: 60,
+    color: brownTheme.textPrimary,
+    fontWeight: 'bold',
   },
-  title: {
-    fontSize: 36,
+  profileName: {
+    fontSize: 28,
     fontWeight: '800',
-    textAlign: 'center',
-    marginBottom: 12,
-    color: '#ffffff',
-    textShadowColor: 'rgba(0, 0, 0, 0.4)',
-    textShadowOffset: { width: 2, height: 2 },
-    textShadowRadius: 4,
+    color: brownTheme.textDark,
+    marginBottom: 8,
   },
-  subtitle: {
+  profileId: {
     fontSize: 18,
-    textAlign: 'center',
-    color: '#ffffff',
+    color: brownTheme.textSecondary,
     fontWeight: '600',
-    textShadowColor: 'rgba(0, 0, 0, 0.3)',
-    textShadowOffset: { width: 1, height: 1 },
-    textShadowRadius: 2,
   },
-  infoCard: {
-    backgroundColor: 'rgba(255, 255, 255, 0.95)',
+  infoContainer: {
+    backgroundColor: brownTheme.secondaryLight,
     borderRadius: 25,
     padding: 30,
     marginBottom: 35,
     elevation: 10,
-    shadowColor: '#000',
+    shadowColor: brownTheme.shadowColor,
     shadowOffset: { width: 0, height: 6 },
-    shadowOpacity: 0.2,
+    shadowOpacity: 0.3,
     shadowRadius: 15,
     borderWidth: 1,
-    borderColor: 'rgba(0, 0, 0, 0.05)',
+    borderColor: brownTheme.secondary,
   },
-  infoRow: {
+  infoItem: {
     flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: 20,
+    justifyContent: 'space-between',
+    paddingVertical: 18,
+    borderBottomWidth: 1,
+    borderBottomColor: brownTheme.secondary,
   },
-  iconBox: {
-    width: 50,
-    height: 50,
-    borderRadius: 15,
-    backgroundColor: '#f0f2f5',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginRight: 20,
-    elevation: 2,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 3,
-  },
-  icon: {
-    fontSize: 24,
-  },
-  infoContent: {
+  infoLabel: {
+    fontSize: 18,
+    color: brownTheme.textSecondary,
+    fontWeight: '600',
     flex: 1,
   },
-  label: {
-    fontSize: 16,
-    fontWeight: '700',
-    color: '#666',
-    marginBottom: 5,
+  infoValue: {
+    fontSize: 18,
+    color: brownTheme.textDark,
+    fontWeight: '600',
+    flex: 1,
+    textAlign: 'right',
   },
-  value: {
-    fontSize: 20,
+  infoValueActive: {
+    fontSize: 18,
+    color: brownTheme.primary,
     fontWeight: '800',
-    color: '#333',
+    flex: 1,
+    textAlign: 'right',
   },
-  divider: {
-    height: 1,
-    backgroundColor: '#e0e0e0',
-    marginVertical: 8,
+  actionsContainer: {
+    gap: 20,
   },
-  buttonContainer: {
-    width: '100%',
-  },
-  button: {
+  editButton: {
+    backgroundColor: brownTheme.primary,
     padding: 22,
     borderRadius: 15,
     alignItems: 'center',
-    marginBottom: 20,
     elevation: 6,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.25,
+    shadowColor: brownTheme.primaryDark,
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.4,
     shadowRadius: 8,
-    borderWidth: 2,
   },
-  editButton: {
-    backgroundColor: '#ffffff',
-    borderColor: '#ffffff',
-  },
-  backButton: {
-    backgroundColor: 'rgba(255, 255, 255, 0.3)',
-    borderWidth: 3,
-    borderColor: 'rgba(255, 255, 255, 0.6)',
->>>>>>> f86f157f907ed0329baa3f88316eda5926916f7b
-  },
-  buttonText: {
-    color: '#4a6fc0',
+  editButtonText: {
+    color: brownTheme.textPrimary,
     fontSize: 20,
     fontWeight: '800',
+  },
+  settingsButton: {
+    backgroundColor: brownTheme.backgroundOverlay,
+    padding: 22,
+    borderRadius: 15,
+    alignItems: 'center',
+    borderWidth: 2,
+    borderColor: brownTheme.secondary,
+    elevation: 5,
+    shadowColor: brownTheme.shadowColor,
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.3,
+    shadowRadius: 6,
+  },
+  settingsButtonText: {
+    color: brownTheme.textPrimary,
+    fontSize: 20,
+    fontWeight: '800',
+    textShadowColor: brownTheme.shadowColor,
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 2,
   },
 });

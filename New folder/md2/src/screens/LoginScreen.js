@@ -1,66 +1,89 @@
-import React, { useState } from 'react';
-<<<<<<< HEAD
-import { StyleSheet, Text, View, TextInput, Alert, SafeAreaView } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-import AnimatedLogo from '../components/AnimatedLogo';
-import ButtonAnimation from '../components/ButtonAnimation';
-import LoadingDots from '../components/LoadingDots';
-=======
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert, SafeAreaView, StatusBar } from 'react-native';
->>>>>>> f86f157f907ed0329baa3f88316eda5926916f7b
+import React, { useState, useEffect, useRef } from 'react';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert, SafeAreaView, StatusBar, Animated } from 'react-native';
+import * as Animatable from 'react-native-animatable';
+import { brownTheme } from '../themes/brownTheme';
 
 export default function LoginScreen({ navigation }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-<<<<<<< HEAD
-  const [isLoading, setIsLoading] = useState(false);
-=======
   const [isFocused, setIsFocused] = useState({ email: false, password: false });
->>>>>>> f86f157f907ed0329baa3f88316eda5926916f7b
+  
+  // Animation refs
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+  const slideAnim = useRef(new Animated.Value(50)).current;
+
+  useEffect(() => {
+    // Entrance animations
+    Animated.parallel([
+      Animated.timing(fadeAnim, {
+        toValue: 1,
+        duration: 800,
+        useNativeDriver: true,
+      }),
+      Animated.timing(slideAnim, {
+        toValue: 0,
+        duration: 600,
+        useNativeDriver: true,
+      })
+    ]).start();
+  }, []);
 
   const handleLogin = () => {
-    setIsLoading(true);
-    // Simulate API call
-    setTimeout(() => {
-      setIsLoading(false);
     // Basic validation - check if fields are not empty
     if (!email.trim() || !password.trim()) {
       Alert.alert('Validation Error', 'Please fill in all fields');
       return;
     }
 
-      // In a real app, you would authenticate with backend here
-      // For this demo, we'll just navigate to home
-      navigation.navigate('Home', { userEmail: email });
-    }, 1500);
+    // In a real app, you would authenticate with backend here
+    // For this demo, we'll just navigate to home
+    navigation.navigate('Home', { userEmail: email });
   };
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="light-content" />
-      <View style={styles.content}>
-<<<<<<< HEAD
-        {/* Logo/Title */}
-        <AnimatedLogo size={80} color="#8B4513" />
-        <Text style={styles.title}>Login</Text>
-        <Text style={styles.subtitle}>Enter your credentials</Text>
-=======
-        {/* Header */}
-        <View style={styles.header}>
-          <Text style={styles.logo}>🔐</Text>
+      <StatusBar barStyle="light-content" backgroundColor={brownTheme.background} />
+      <Animated.View 
+        style={[
+          styles.content,
+          {
+            opacity: fadeAnim,
+            transform: [{ translateY: slideAnim }]
+          }
+        ]}
+      >
+        {/* Header with animations */}
+        <Animatable.View 
+          animation="fadeInDown"
+          duration={1000}
+          style={styles.header}
+        >
+          <Animatable.Text 
+            animation="pulse"
+            iterationCount="infinite"
+            direction="alternate"
+            duration={2500}
+            style={styles.logo}
+          >
+            ☕
+          </Animatable.Text>
           <Text style={styles.title}>Welcome Back</Text>
           <Text style={styles.subtitle}>Sign in to continue</Text>
-        </View>
->>>>>>> f86f157f907ed0329baa3f88316eda5926916f7b
+        </Animatable.View>
 
-        {/* Form Container */}
-        <View style={styles.formContainer}>
+        {/* Form Container with slide animation */}
+        <Animatable.View 
+          animation="fadeInUp"
+          delay={300}
+          duration={800}
+          style={styles.formContainer}
+        >
           {/* Email/Username Input */}
           <View style={[styles.inputContainer, isFocused.email && styles.inputFocused]}>
             <TextInput
               style={styles.input}
               placeholder="Email or Username"
-              placeholderTextColor="rgba(0, 0, 0, 0.5)"
+              placeholderTextColor={brownTheme.textDark}
               value={email}
               onChangeText={setEmail}
               keyboardType="email-address"
@@ -75,7 +98,7 @@ export default function LoginScreen({ navigation }) {
             <TextInput
               style={styles.input}
               placeholder="Password"
-              placeholderTextColor="rgba(0, 0, 0, 0.5)"
+              placeholderTextColor={brownTheme.textDark}
               value={password}
               onChangeText={setPassword}
               secureTextEntry
@@ -84,46 +107,40 @@ export default function LoginScreen({ navigation }) {
             />
           </View>
 
-<<<<<<< HEAD
-        {/* Login Button */}
-        {isLoading ? (
-          <View style={styles.loadingContainer}>
-            <LoadingDots size={10} color="#8B4513" />
-            <Text style={styles.loadingText}>Signing in...</Text>
-          </View>
-        ) : (
-          <ButtonAnimation 
-            title="Login"
-            backgroundColor="#8B4513"
-            onPress={handleLogin}
-            style={styles.loginButton}
-          />
-        )}
-=======
           {/* Forgot Password */}
           <TouchableOpacity style={styles.forgotButton}>
             <Text style={styles.forgotText}>Forgot Password?</Text>
           </TouchableOpacity>
 
-          {/* Login Button */}
-          <TouchableOpacity 
-            style={styles.loginButton} 
-            onPress={handleLogin}
-            activeOpacity={0.8}
+          {/* Login Button with bounce animation */}
+          <Animatable.View 
+            animation="bounceIn" 
+            delay={600}
+            duration={600}
           >
-            <Text style={styles.buttonText}>Login</Text>
-          </TouchableOpacity>
-        </View>
->>>>>>> f86f157f907ed0329baa3f88316eda5926916f7b
+            <TouchableOpacity 
+              style={styles.loginButton} 
+              onPress={handleLogin}
+              activeOpacity={0.8}
+            >
+              <Text style={styles.buttonText}>Login</Text>
+            </TouchableOpacity>
+          </Animatable.View>
+        </Animatable.View>
 
-        {/* Sign Up Link */}
-        <View style={styles.linkContainer}>
+        {/* Sign Up Link with fade animation */}
+        <Animatable.View 
+          animation="fadeIn"
+          delay={900}
+          duration={600}
+          style={styles.linkContainer}
+        >
           <Text style={styles.linkText}>Don't have an account? </Text>
           <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
             <Text style={styles.link}>Sign Up</Text>
           </TouchableOpacity>
-        </View>
-      </View>
+        </Animatable.View>
+      </Animated.View>
     </SafeAreaView>
   );
 }
@@ -131,11 +148,7 @@ export default function LoginScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-<<<<<<< HEAD
-    backgroundColor: '#f5e9dc',
-=======
-    backgroundColor: '#4a6fc0', // Consistent darker blue
->>>>>>> f86f157f907ed0329baa3f88316eda5926916f7b
+    backgroundColor: brownTheme.background,
   },
   content: {
     flex: 1,
@@ -149,96 +162,55 @@ const styles = StyleSheet.create({
   logo: {
     fontSize: 70,
     textAlign: 'center',
-<<<<<<< HEAD
-    marginBottom: 15,
-    color: '#8B4513',
-  },
-  title: {
-    fontSize: 30,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    marginBottom: 10,
-    color: '#8B4513',
-  },
-  subtitle: {
-    fontSize: 16,
-    textAlign: 'center',
-    marginBottom: 30,
-    color: '#A1887F',
-  },
-  input: {
-    height: 55,
-    borderColor: '#D7CCC8',
-    borderWidth: 2,
-    borderRadius: 12,
-    paddingHorizontal: 18,
     marginBottom: 20,
-    backgroundColor: '#fff',
-    fontSize: 16,
-    shadowColor: '#8B4513',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
-    elevation: 2,
-  },
-  loginButton: {
-    backgroundColor: '#8B4513',
-    padding: 18,
-    borderRadius: 12,
-    alignItems: 'center',
-    marginTop: 15,
-    shadowColor: '#8B4513',
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.3,
-    shadowRadius: 5,
-    elevation: 4,
-=======
-    marginBottom: 20,
-    color: '#ffffff',
+    color: brownTheme.secondary,
+    textShadowColor: brownTheme.shadowColor,
+    textShadowOffset: { width: 2, height: 2 },
+    textShadowRadius: 6,
   },
   title: {
     fontSize: 36,
     fontWeight: '800',
     textAlign: 'center',
     marginBottom: 12,
-    color: '#ffffff',
-    textShadowColor: 'rgba(0, 0, 0, 0.4)',
+    color: brownTheme.textPrimary,
+    textShadowColor: brownTheme.shadowColor,
     textShadowOffset: { width: 2, height: 2 },
     textShadowRadius: 4,
   },
   subtitle: {
     fontSize: 18,
     textAlign: 'center',
-    color: '#ffffff',
+    color: brownTheme.textSecondary,
     fontWeight: '600',
-    textShadowColor: 'rgba(0, 0, 0, 0.3)',
+    textShadowColor: brownTheme.shadowColor,
     textShadowOffset: { width: 1, height: 1 },
     textShadowRadius: 2,
   },
   formContainer: {
-    backgroundColor: 'rgba(255, 255, 255, 0.95)',
+    backgroundColor: brownTheme.secondaryLight,
     borderRadius: 25,
     padding: 30,
     marginBottom: 35,
     elevation: 10,
-    shadowColor: '#000',
+    shadowColor: brownTheme.shadowColor,
     shadowOffset: { width: 0, height: 6 },
-    shadowOpacity: 0.2,
+    shadowOpacity: 0.3,
     shadowRadius: 15,
     borderWidth: 1,
-    borderColor: 'rgba(0, 0, 0, 0.05)',
+    borderColor: brownTheme.secondary,
   },
   inputContainer: {
-    backgroundColor: '#ffffff',
+    backgroundColor: brownTheme.textPrimary,
     borderRadius: 15,
     marginBottom: 25,
     borderWidth: 3,
-    borderColor: '#e0e0e0',
+    borderColor: brownTheme.secondary,
   },
   inputFocused: {
-    borderColor: '#4a6fc0',
-    backgroundColor: '#ffffff',
-    shadowColor: '#4a6fc0',
+    borderColor: brownTheme.primary,
+    backgroundColor: brownTheme.textPrimary,
+    shadowColor: brownTheme.primary,
     shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 0.3,
     shadowRadius: 8,
@@ -248,7 +220,7 @@ const styles = StyleSheet.create({
     height: 60,
     paddingHorizontal: 25,
     fontSize: 18,
-    color: '#333',
+    color: brownTheme.textDark,
     fontWeight: '600',
   },
   forgotButton: {
@@ -256,25 +228,27 @@ const styles = StyleSheet.create({
     marginBottom: 30,
   },
   forgotText: {
-    color: '#4a6fc0',
+    color: brownTheme.primary,
     fontSize: 16,
     fontWeight: '700',
     textDecorationLine: 'underline',
   },
   loginButton: {
-    backgroundColor: '#4a6fc0',
-    padding: 22,
+    backgroundColor: brownTheme.primary,
+    paddingVertical: 25,
+    paddingHorizontal: 40,
     borderRadius: 15,
     alignItems: 'center',
     elevation: 6,
-    shadowColor: '#4a6fc0',
+    shadowColor: brownTheme.primaryDark,
     shadowOffset: { width: 0, height: 6 },
     shadowOpacity: 0.4,
     shadowRadius: 8,
->>>>>>> f86f157f907ed0329baa3f88316eda5926916f7b
+    alignSelf: 'center',
+    minWidth: '80%',
   },
   buttonText: {
-    color: '#ffffff',
+    color: brownTheme.textPrimary,
     fontSize: 20,
     fontWeight: '800',
   },
@@ -284,40 +258,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   linkText: {
-<<<<<<< HEAD
-    fontSize: 16,
-    color: '#5D4037',
-  },
-  link: {
-    fontSize: 16,
-    color: '#8B4513',
-    fontWeight: 'bold',
-=======
     fontSize: 18,
-    color: '#ffffff',
+    color: brownTheme.textSecondary,
     fontWeight: '600',
-    textShadowColor: 'rgba(0, 0, 0, 0.3)',
+    textShadowColor: brownTheme.shadowColor,
     textShadowOffset: { width: 1, height: 1 },
     textShadowRadius: 2,
   },
   link: {
     fontSize: 18,
-    color: '#ffffff',
+    color: brownTheme.textPrimary,
     fontWeight: '800',
     textDecorationLine: 'underline',
-    textShadowColor: 'rgba(0, 0, 0, 0.3)',
+    textShadowColor: brownTheme.shadowColor,
     textShadowOffset: { width: 1, height: 1 },
     textShadowRadius: 2,
->>>>>>> f86f157f907ed0329baa3f88316eda5926916f7b
-  },
-  loadingContainer: {
-    alignItems: 'center',
-    marginVertical: 20,
-  },
-  loadingText: {
-    color: '#8B4513',
-    fontSize: 16,
-    marginTop: 10,
-    fontStyle: 'italic',
   },
 });

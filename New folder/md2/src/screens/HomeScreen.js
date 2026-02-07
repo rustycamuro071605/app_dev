@@ -1,126 +1,176 @@
-import React from 'react';
-<<<<<<< HEAD
-import { StyleSheet, Text, View, SafeAreaView } from 'react-native';
-import AnimatedLogo from '../components/AnimatedLogo';
-import ButtonAnimation from '../components/ButtonAnimation';
-=======
-import { StyleSheet, Text, View, TouchableOpacity, SafeAreaView, StatusBar } from 'react-native';
->>>>>>> f86f157f907ed0329baa3f88316eda5926916f7b
+import React, { useEffect, useRef } from 'react';
+import { StyleSheet, Text, View, TouchableOpacity, SafeAreaView, StatusBar, Animated } from 'react-native';
+import * as Animatable from 'react-native-animatable';
+import { brownTheme } from '../themes/brownTheme';
 
 export default function HomeScreen({ route, navigation }) {
   const { userEmail, userId } = route.params || {};
+  
+  // Animation refs
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+  const scaleAnim = useRef(new Animated.Value(0.8)).current;
+  const slideAnim = useRef(new Animated.Value(100)).current;
+
+  useEffect(() => {
+    // Entrance animations
+    Animated.parallel([
+      Animated.timing(fadeAnim, {
+        toValue: 1,
+        duration: 800,
+        useNativeDriver: true,
+      }),
+      Animated.spring(scaleAnim, {
+        toValue: 1,
+        friction: 6,
+        useNativeDriver: true,
+      }),
+      Animated.timing(slideAnim, {
+        toValue: 0,
+        duration: 600,
+        useNativeDriver: true,
+      })
+    ]).start();
+  }, []);
 
   const handleLogout = () => {
     // Navigate back to Welcome screen
     navigation.replace('Welcome');
   };
 
+  const handleProfile = () => {
+    navigation.navigate('Profile');
+  };
+
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="light-content" />
-      <View style={styles.content}>
-<<<<<<< HEAD
-        {/* Welcome Message */}
-        <AnimatedLogo size={80} color="#8B4513" />
-        <Text style={styles.title}>Home</Text>
-        <Text style={styles.welcomeMessage}>
-          Welcome, {userEmail || 'User'}!
-        </Text>
-        <Text style={styles.subtitle}>Enjoy your cozy space</Text>
+      <StatusBar barStyle="light-content" backgroundColor={brownTheme.background} />
+      <Animated.View 
+        style={[
+          styles.content,
+          {
+            opacity: fadeAnim,
+            transform: [
+              { scale: scaleAnim },
+              { translateY: slideAnim }
+            ]
+          }
+        ]}
+      >
+        {/* Header with animation */}
+        <Animatable.View 
+          animation="fadeInDown"
+          duration={1000}
+          style={styles.header}
+        >
+          <Animatable.Text 
+            animation="pulse" 
+            iterationCount="infinite"
+            direction="alternate"
+            duration={2000}
+            style={styles.logo}
+          >
+            ☕
+          </Animatable.Text>
+          <Text style={styles.title}>Welcome Home!</Text>
+          <Text style={styles.subtitle}>
+            {userEmail ? `Hello, ${userEmail}!` : 'Enjoy your experience'}
+          </Text>
+        </Animatable.View>
 
-        {/* View Profile Button */}
-        <ButtonAnimation 
-          title="View Profile"
-          backgroundColor="#8B4513"
-          onPress={() => navigation.navigate('Profile', { userEmail, userId })}
-          style={styles.button}
-        />
+        {/* Stats Cards with staggered animations */}
+        <Animatable.View 
+          animation="fadeInUp"
+          delay={300}
+          duration={800}
+          style={styles.statsContainer}
+        >
+          <Animatable.View 
+            animation="bounceIn" 
+            delay={400}
+            duration={600}
+            style={styles.statCard}
+          >
+            <Text style={styles.statNumber}>12</Text>
+            <Text style={styles.statLabel}>Projects</Text>
+          </Animatable.View>
+          <Animatable.View 
+            animation="bounceIn" 
+            delay={500}
+            duration={600}
+            style={styles.statCard}
+          >
+            <Text style={styles.statNumber}>8</Text>
+            <Text style={styles.statLabel}>Tasks</Text>
+          </Animatable.View>
+          <Animatable.View 
+            animation="bounceIn" 
+            delay={600}
+            duration={600}
+            style={styles.statCard}
+          >
+            <Text style={styles.statNumber}>24</Text>
+            <Text style={styles.statLabel}>Hours</Text>
+          </Animatable.View>
+        </Animatable.View>
 
-        {/* Logout Button */}
-        <ButtonAnimation 
-          title="Logout"
-          backgroundColor="#A1887F"
-          onPress={handleLogout}
-          style={styles.button}
-        />
-=======
-        {/* Header Section - More Prominent */}
-        <View style={styles.headerSection}>
-          <View style={styles.headerCard}>
-            <Text style={styles.logo}>🏠</Text>
-            <Text style={styles.title}>Dashboard</Text>
-            <Text style={styles.welcomeMessage}>
-              Welcome back, {userEmail || 'User'}!
-            </Text>
-          </View>
-        </View>
-
-        {/* Stats Section - Enhanced Visibility */}
-        <View style={styles.statsSection}>
-          <Text style={styles.sectionTitle}>Your Overview</Text>
-          <View style={styles.statsContainer}>
-            <View style={styles.statCard}>
-              <View style={styles.statIconContainer}>
-                <Text style={styles.statIcon}>📋</Text>
-              </View>
-              <Text style={styles.statNumber}>12</Text>
-              <Text style={styles.statLabel}>Projects</Text>
-            </View>
-            
-            <View style={styles.statCard}>
-              <View style={styles.statIconContainer}>
-                <Text style={styles.statIcon}>✅</Text>
-              </View>
-              <Text style={styles.statNumber}>8</Text>
-              <Text style={styles.statLabel}>Tasks</Text>
-            </View>
-            
-            <View style={styles.statCard}>
-              <View style={styles.statIconContainer}>
-                <Text style={styles.statIcon}>👥</Text>
-              </View>
-              <Text style={styles.statNumber}>3</Text>
-              <Text style={styles.statLabel}>Teams</Text>
-            </View>
-          </View>
-        </View>
-
-        {/* Quick Actions - Clearer Buttons */}
-        <View style={styles.actionsSection}>
-          <Text style={styles.sectionTitle}>Quick Actions</Text>
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity 
-              style={[styles.button, styles.profileButton]}
-              onPress={() => navigation.navigate('Profile', { userEmail, userId })}
-              activeOpacity={0.7}
+        {/* Quick Actions with hover effects */}
+        <Animatable.View 
+          animation="fadeInUp"
+          delay={700}
+          duration={800}
+          style={styles.actionsContainer}
+        >
+          <TouchableOpacity style={styles.actionButton} onPress={handleProfile}>
+            <Animatable.Text 
+              animation="rubberBand" 
+              iterationCount="infinite"
+              delay={2000}
+              duration={3000}
+              style={styles.actionIcon}
             >
-              <Text style={styles.buttonIcon}>👤</Text>
-              <Text style={styles.buttonText}>View Profile</Text>
-            </TouchableOpacity>
+              👤
+            </Animatable.Text>
+            <Text style={styles.actionText}>My Profile</Text>
+          </TouchableOpacity>
+          
+          <TouchableOpacity style={styles.actionButton}>
+            <Text style={styles.actionIcon}>📊</Text>
+            <Text style={styles.actionText}>Analytics</Text>
+          </TouchableOpacity>
+          
+          <TouchableOpacity style={styles.actionButton}>
+            <Text style={styles.actionIcon}>⚙️</Text>
+            <Text style={styles.actionText}>Settings</Text>
+          </TouchableOpacity>
+          
+          <TouchableOpacity style={styles.actionButton}>
+            <Text style={styles.actionIcon}>💬</Text>
+            <Text style={styles.actionText}>Support</Text>
+          </TouchableOpacity>
+        </Animatable.View>
 
-            <TouchableOpacity 
-              style={[styles.button, styles.settingsButton]}
-              activeOpacity={0.7}
+        {/* Logout Button with pulse animation */}
+        <Animatable.View 
+          animation="fadeIn"
+          delay={1000}
+          duration={600}
+        >
+          <TouchableOpacity 
+            style={styles.logoutButton} 
+            onPress={handleLogout}
+            activeOpacity={0.8}
+          >
+            <Animatable.Text 
+              animation="pulse"
+              iterationCount="infinite"
+              duration={1500}
+              style={styles.logoutText}
             >
-              <Text style={styles.buttonIcon}>⚙️</Text>
-              <Text style={styles.buttonText}>Settings</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity 
-              style={[styles.button, styles.logoutButton]}
-              onPress={handleLogout}
-              activeOpacity={0.7}
-            >
-              <Text style={styles.buttonIcon}>🚪</Text>
-              <Text style={styles.buttonText}>Logout</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-
-        {/* Footer */}
-        <Text style={styles.footerText}>MyApp v1.0</Text>
->>>>>>> f86f157f907ed0329baa3f88316eda5926916f7b
-      </View>
+              Logout
+            </Animatable.Text>
+          </TouchableOpacity>
+        </Animatable.View>
+      </Animated.View>
     </SafeAreaView>
   );
 }
@@ -128,213 +178,128 @@ export default function HomeScreen({ route, navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-<<<<<<< HEAD
-    backgroundColor: '#f5e9dc',
-=======
-    backgroundColor: '#4a6fc0',
->>>>>>> f86f157f907ed0329baa3f88316eda5926916f7b
+    backgroundColor: brownTheme.background,
   },
   content: {
     flex: 1,
-    padding: 25,
-    justifyContent: 'flex-start',
+    padding: 35,
+    justifyContent: 'center',
   },
-  // Header Section
-  headerSection: {
-    marginBottom: 30,
-    marginTop: 20,
-  },
-  headerCard: {
-    backgroundColor: 'rgba(255, 255, 255, 0.9)',
-    borderRadius: 25,
-    padding: 30,
+  header: {
     alignItems: 'center',
-    elevation: 12,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.25,
-    shadowRadius: 15,
-    borderWidth: 1,
-    borderColor: 'rgba(0, 0, 0, 0.05)',
+    marginBottom: 50,
   },
   logo: {
-<<<<<<< HEAD
-    fontSize: 70,
+    fontSize: 80,
     textAlign: 'center',
-    marginBottom: 15,
-    color: '#8B4513',
+    marginBottom: 20,
+    color: brownTheme.secondary,
+    textShadowColor: brownTheme.shadowColor,
+    textShadowOffset: { width: 2, height: 2 },
+    textShadowRadius: 6,
   },
   title: {
-    fontSize: 30,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    marginBottom: 15,
-    color: '#8B4513',
-  },
-  welcomeMessage: {
-    fontSize: 22,
-    textAlign: 'center',
-    marginBottom: 15,
-    color: '#5D4037',
-    lineHeight: 28,
-=======
-    fontSize: 50,
-    textAlign: 'center',
-    marginBottom: 15,
-    color: '#4a6fc0',
-  },
-  title: {
-    fontSize: 32,
+    fontSize: 36,
     fontWeight: '800',
     textAlign: 'center',
     marginBottom: 12,
-    color: '#333',
+    color: brownTheme.textPrimary,
+    textShadowColor: brownTheme.shadowColor,
+    textShadowOffset: { width: 2, height: 2 },
+    textShadowRadius: 4,
   },
-  welcomeMessage: {
-    fontSize: 18,
+  subtitle: {
+    fontSize: 20,
     textAlign: 'center',
-    color: '#666',
-    lineHeight: 26,
-    fontWeight: '500',
-  },
-  
-  // Section Titles
-  sectionTitle: {
-    fontSize: 22,
-    fontWeight: '700',
-    color: '#ffffff',
-    marginBottom: 20,
-    textShadowColor: 'rgba(0, 0, 0, 0.3)',
+    color: brownTheme.textSecondary,
+    fontWeight: '600',
+    textShadowColor: brownTheme.shadowColor,
     textShadowOffset: { width: 1, height: 1 },
     textShadowRadius: 2,
-  },
-  
-  // Stats Section
-  statsSection: {
-    marginBottom: 35,
   },
   statsContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    marginBottom: 50,
   },
   statCard: {
-    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    backgroundColor: brownTheme.secondaryLight,
     borderRadius: 20,
-    padding: 20,
+    padding: 25,
     alignItems: 'center',
-    width: '31%',
+    width: '30%',
     elevation: 8,
-    shadowColor: '#000',
+    shadowColor: brownTheme.shadowColor,
     shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.2,
+    shadowOpacity: 0.3,
     shadowRadius: 10,
-    borderWidth: 1,
-    borderColor: 'rgba(0, 0, 0, 0.05)',
-  },
-  statIconContainer: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    backgroundColor: '#f0f5ff',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 12,
-  },
-  statIcon: {
-    fontSize: 24,
+    borderWidth: 2,
+    borderColor: brownTheme.primaryLight,
   },
   statNumber: {
-    fontSize: 28,
+    fontSize: 32,
     fontWeight: '800',
-    color: '#4a6fc0',
-    marginBottom: 5,
+    color: brownTheme.primaryDark,
+    marginBottom: 8,
   },
   statLabel: {
-    fontSize: 14,
-    color: '#666',
+    fontSize: 16,
+    color: brownTheme.textDark,
     fontWeight: '600',
   },
-  
-  // Actions Section
-  actionsSection: {
-    marginBottom: 25,
+  actionsContainer: {
+    backgroundColor: brownTheme.secondaryLight,
+    borderRadius: 25,
+    padding: 25,
+    marginBottom: 35,
+    elevation: 10,
+    shadowColor: brownTheme.shadowColor,
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.3,
+    shadowRadius: 15,
+    borderWidth: 1,
+    borderColor: brownTheme.secondary,
   },
-  buttonContainer: {
-    width: '100%',
->>>>>>> f86f157f907ed0329baa3f88316eda5926916f7b
-  },
-  subtitle: {
-    fontSize: 16,
-    textAlign: 'center',
-    marginBottom: 40,
-    color: '#A1887F',
-    fontStyle: 'italic',
-  },
-  button: {
-<<<<<<< HEAD
-    padding: 18,
-    borderRadius: 12,
-=======
+  actionButton: {
     flexDirection: 'row',
->>>>>>> f86f157f907ed0329baa3f88316eda5926916f7b
     alignItems: 'center',
-    justifyContent: 'flex-start',
-    padding: 20,
-    borderRadius: 15,
-    marginBottom: 15,
-<<<<<<< HEAD
-    shadowColor: '#8B4513',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-    elevation: 3,
+    paddingVertical: 18,
+    paddingHorizontal: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: brownTheme.secondary,
   },
-  profileButton: {
-    backgroundColor: '#8B4513',
-  },
-  logoutButton: {
-    backgroundColor: '#A1887F',
-=======
-    elevation: 6,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.2,
-    shadowRadius: 8,
-    borderWidth: 2,
-  },
-  buttonIcon: {
-    fontSize: 24,
-    marginRight: 15,
+  actionIcon: {
+    fontSize: 28,
+    marginRight: 20,
     width: 30,
     textAlign: 'center',
+    color: brownTheme.primary,
   },
-  profileButton: {
-    backgroundColor: '#ffffff',
-    borderColor: '#4a6fc0',
-  },
-  settingsButton: {
-    backgroundColor: 'rgba(255, 255, 255, 0.9)',
-    borderColor: 'rgba(255, 255, 255, 0.7)',
+  actionText: {
+    fontSize: 18,
+    color: brownTheme.textDark,
+    fontWeight: '600',
+    flex: 1,
   },
   logoutButton: {
-    backgroundColor: '#ff5252',
-    borderColor: '#ff5252',
->>>>>>> f86f157f907ed0329baa3f88316eda5926916f7b
+    backgroundColor: brownTheme.backgroundOverlay,
+    padding: 20,
+    borderRadius: 15,
+    alignItems: 'center',
+    borderWidth: 2,
+    borderColor: brownTheme.secondary,
+    elevation: 5,
+    shadowColor: brownTheme.shadowColor,
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.3,
+    shadowRadius: 6,
   },
-  buttonText: {
-    color: '#4a6fc0',
-    fontSize: 18,
-    fontWeight: '700',
-  },
-  footerText: {
-    position: 'absolute',
-    bottom: 25,
-    alignSelf: 'center',
-    color: 'rgba(255, 255, 255, 0.9)',
-    fontSize: 14,
-    fontWeight: '600',
-    textShadowColor: 'rgba(0, 0, 0, 0.3)',
+  logoutText: {
+    color: brownTheme.textPrimary,
+    fontSize: 20,
+    fontWeight: '800',
+    textShadowColor: brownTheme.shadowColor,
     textShadowOffset: { width: 1, height: 1 },
-    textShadowRadius: 1,
+    textShadowRadius: 2,
   },
 });

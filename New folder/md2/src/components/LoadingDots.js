@@ -1,8 +1,9 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import * as Animatable from 'react-native-animatable';
+import { brownTheme } from '../themes/brownTheme';
 
-export default function LoadingDots({ size = 12, color = '#8B4513' }) {
+export default function LoadingDots({ size = 12, color = brownTheme.primary }) {
   return (
     <View style={styles.container}>
       <Animatable.View 
@@ -40,10 +41,12 @@ const styles = StyleSheet.create({
   dot: {
     borderRadius: 6,
     marginHorizontal: 4,
-    shadowColor: '#8B4513',
+    shadowColor: brownTheme.shadowColor,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.3,
     shadowRadius: 3,
     elevation: 3,
+    borderWidth: 1,
+    borderColor: brownTheme.secondary,
   },
 });
